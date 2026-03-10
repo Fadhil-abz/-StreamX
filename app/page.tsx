@@ -1,65 +1,206 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect, useRef } from "react";
+
+export default function VideoPage() {
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  
+  // Referensi untuk section download agar bisa di-scroll otomatis
+  const downloadSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else {
+      setIsUnlocked(true);
+    }
+  }, [timeLeft]);
+
+  // Fungsi untuk scroll halus ke section timer
+  const handlePlayClick = () => {
+    downloadSectionRef.current?.scrollIntoView({ 
+      behavior: "smooth",
+      block: "start"
+    });
+    // Opsional: Buka iklan Adsterra saat tombol play diklik pertama kali
+    // window.open("https://link-adsterra-anda.com/...", "_blank");
+  };
+
+  const handleDownload = () => {
+    if (isUnlocked) {
+      window.open("https://link-adsterra-anda.com/...", "_blank");
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="relative flex flex-col w-full overflow-x-hidden min-h-screen bg-background-light dark:bg-background-dark">
+      <div className="layout-container flex h-full grow flex-col">
+        
+        {/* Navigation */}
+        <header className="flex items-center justify-between border-b border-slate-200 dark:border-primary/20 px-4 md:px-10 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+          <div className="flex items-center gap-4 text-primary">
+            <span className="material-symbols-outlined text-3xl">movie_filter</span>
+            <h2 className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">StreamX</h2>
+          </div>
+          
+          <div className="flex flex-1 justify-end gap-4 md:gap-8">
+            <div className="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+              <div className="flex w-full flex-1 items-stretch rounded-lg h-full">
+                <div className="text-slate-400 flex border-none bg-slate-200 dark:bg-primary/10 items-center justify-center pl-4 rounded-l-lg">
+                  <span className="material-symbols-outlined text-xl">search</span>
+                </div>
+                <input 
+                  className="flex w-full min-w-0 flex-1 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border-none bg-slate-200 dark:bg-primary/10 h-full placeholder:text-slate-500 px-4 rounded-l-none pl-2 text-base" 
+                  placeholder="Cari video..." 
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-primary/20 text-slate-700 dark:text-primary transition-colors">
+                <span className="material-symbols-outlined">share</span>
+              </button>
+              <button className="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-primary/20 text-slate-700 dark:text-primary">
+                <span className="material-symbols-outlined">more_vert</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 flex flex-col items-center">
+          <div className="w-full max-w-5xl px-0 md:px-4 py-4 md:py-8 space-y-8">
+            
+            {/* Video Player Section */}
+            <div 
+              onClick={handlePlayClick}
+              className="relative group aspect-video w-full rounded-none md:rounded-xl overflow-hidden bg-slate-900 shadow-2xl shadow-primary/10 cursor-pointer"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+              <div 
+                className="absolute inset-0 flex items-center justify-center bg-cover bg-center"
+                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000')` }}
+              >
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+                <button className="relative flex shrink-0 items-center justify-center rounded-full w-20 h-20 bg-primary/90 text-white shadow-lg group-hover:scale-110 transition-transform">
+                  <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>play_arrow</span>
+                </button>
+              </div>
+
+              {/* Video Controls Overlay */}
+              <div className="absolute inset-x-0 bottom-0 px-6 py-4 bg-gradient-to-t from-black/80 to-transparent">
+                <div className="flex h-1.5 w-full items-center mb-3">
+                  <div className="h-full w-1/3 rounded-full bg-primary relative">
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white border-2 border-primary"></div>
+                  </div>
+                  <div className="h-full flex-1 rounded-full bg-slate-400/30"></div>
+                </div>
+                <div className="flex items-center justify-between text-white/90">
+                  <div className="flex items-center gap-4">
+                    <span className="material-symbols-outlined">pause</span>
+                    <span className="material-symbols-outlined">volume_up</span>
+                    <p className="text-xs font-medium tracking-wider">00:00 / 12:45</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="material-symbols-outlined">settings</span>
+                    <span className="material-symbols-outlined">fullscreen</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Ads Section */}
+            <div className="px-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors cursor-pointer group">
+                    <div className="w-16 h-16 rounded-lg bg-slate-300 shrink-0"></div>
+                    <div className="overflow-hidden">
+                      <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Sponsored</span>
+                      <h4 className="text-slate-900 dark:text-slate-100 font-bold text-sm truncate">Premium Product {i}</h4>
+                      <p className="text-slate-500 dark:text-slate-400 text-xs truncate">Penawaran terbatas!</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Locked Link Section */}
+            <div ref={downloadSectionRef} className="px-4 pb-12 transition-all duration-500">
+              <div className="relative w-full p-8 md:p-12 rounded-2xl bg-slate-200 dark:bg-primary/10 border-2 border-dashed border-slate-300 dark:border-primary/30 flex flex-col items-center justify-center text-center overflow-hidden">
+                <div className="absolute -top-12 -right-12 size-40 bg-primary/10 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-12 -left-12 size-40 bg-primary/10 rounded-full blur-3xl"></div>
+
+                <div className="relative z-10 space-y-6">
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                      <span className={`material-symbols-outlined text-primary text-3xl ${!isUnlocked && 'animate-pulse'}`}>
+                        {isUnlocked ? 'lock_open' : 'lock_clock'}
+                      </span>
+                    </div>
+                    <h3 className="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight">
+                      {isUnlocked ? "Link Sudah Siap!" : "Link Video Terkunci"}
+                    </h3>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2 max-w-sm">
+                      {isUnlocked 
+                        ? "Silahkan klik tombol di bawah untuk menonton atau mendownload." 
+                        : "Mohon tunggu sebentar, sistem sedang memverifikasi koneksi Anda."}
+                    </p>
+                  </div>
+
+                  {!isUnlocked && (
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/40 flex items-center justify-center shadow-lg">
+                          <span className="text-3xl md:text-4xl font-black text-primary">
+                            {timeLeft}
+                          </span>
+                        </div>
+                        <span className="text-[10px] mt-2 font-bold uppercase tracking-widest text-slate-500">Detik</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {!isUnlocked && (
+                    <div className="w-full max-w-xs h-2 bg-slate-300 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary transition-all duration-1000 ease-linear"
+                        style={{ width: `${(timeLeft / 60) * 100}%` }}
+                      ></div>
+                    </div>
+                  )}
+
+                  <button 
+                    onClick={handleDownload}
+                    disabled={!isUnlocked}
+                    className={`flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-xl transition-all w-full md:w-auto
+                      ${isUnlocked 
+                        ? "bg-primary text-white hover:scale-105 shadow-xl shadow-primary/20 cursor-pointer" 
+                        : "bg-slate-400 dark:bg-slate-700 text-white opacity-80 cursor-not-allowed"
+                      }`}
+                  >
+                    <span className="material-symbols-outlined text-xl">
+                      {isUnlocked ? 'download' : 'lock'}
+                    </span>
+                    {isUnlocked 
+                      ? "Klik untuk Menonton Sekarang" 
+                      : `Tunggu ${timeLeft} detik untuk link video...`}
+                  </button>
+                  
+                  <p className="text-xs text-slate-400 dark:text-slate-500 italic">
+                    Harap jangan menutup halaman ini agar proses verifikasi berjalan lancar.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <footer className="mt-auto py-8 border-t border-slate-200 dark:border-primary/10 text-center text-slate-500 dark:text-slate-400">
+          <p className="text-sm">© 2026 StreamX Entertainment. All rights reserved.</p>
+        </footer>
+      </div>
     </div>
   );
 }
