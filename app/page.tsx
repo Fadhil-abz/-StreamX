@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Script from "next/script";
 
 export default function VideoPage() {
   const [timeLeft, setTimeLeft] = useState(60);
@@ -26,18 +27,24 @@ export default function VideoPage() {
       behavior: "smooth",
       block: "start"
     });
-    // Opsional: Buka iklan Adsterra saat tombol play diklik pertama kali
-    // window.open("https://link-adsterra-anda.com/...", "_blank");
   };
 
   const handleDownload = () => {
     if (isUnlocked) {
-      window.open("https://link-adsterra-anda.com/...", "_blank");
+      // Menggunakan Direct Link Adsterra Anda
+      window.open("https://www.effectivegatecpm.com/u8dwrgdqn?key=db4989986213c83ff807ff443efadc45", "_blank");
     }
   };
 
   return (
     <div className="relative flex flex-col w-full overflow-x-hidden min-h-screen bg-background-light dark:bg-background-dark">
+      
+      {/* --- IKLAN 1: Social Bar / Pop-under (Script Pertama) --- */}
+      <Script 
+        src="https://pl28889469.effectivegatecpm.com/a3/5e/51/a35e5183e7e062a3987a753667e66df3.js"
+        strategy="afterInteractive"
+      />
+
       <div className="layout-container flex h-full grow flex-col">
         
         {/* Navigation */}
@@ -110,19 +117,56 @@ export default function VideoPage() {
               </div>
             </div>
 
-            {/* Ads Section */}
+            {/* --- ADS SECTION: 3 Iklan Berbeda --- */}
             <div className="px-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors cursor-pointer group">
-                    <div className="w-16 h-16 rounded-lg bg-slate-300 shrink-0"></div>
-                    <div className="overflow-hidden">
-                      <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Sponsored</span>
-                      <h4 className="text-slate-900 dark:text-slate-100 font-bold text-sm truncate">Premium Product {i}</h4>
-                      <p className="text-slate-500 dark:text-slate-400 text-xs truncate">Penawaran terbatas!</p>
-                    </div>
+                
+                {/* IKLAN 2: Banner Native (Invoke Script) */}
+                <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 min-h-[150px]">
+                  <span className="text-[10px] font-bold text-primary uppercase mb-2">Recommended</span>
+                  <div id="container-8f676b56a362c68c2c8c2fbda3497bce" className="w-full">
+                    {/* Script Banner akan otomatis mengisi container ini */}
+                    <Script 
+                      src="https://pl28889487.effectivegatecpm.com/8f676b56a362c68c2c8c2fbda3497bce/invoke.js"
+                      strategy="lazyOnload"
+                    />
                   </div>
-                ))}
+                </div>
+
+                {/* IKLAN 3: Direct Link (Iklan Kedua Anda) */}
+                <a 
+                  href="https://www.effectivegatecpm.com/u8dwrgdqn?key=db4989986213c83ff807ff443efadc45"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors cursor-pointer group"
+                >
+                  <div className="w-16 h-16 rounded-lg bg-primary/20 shrink-0 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-primary">ads_click</span>
+                  </div>
+                  <div className="overflow-hidden">
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Sponsored</span>
+                    <h4 className="text-slate-900 dark:text-slate-100 font-bold text-sm truncate">Premium Access</h4>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs truncate">Klik untuk konten eksklusif</p>
+                  </div>
+                </a>
+
+                {/* IKLAN VARIASI: Direct Link (Iklan Kedua Anda - Duplikasi untuk Visual) */}
+                <a 
+                  href="https://www.effectivegatecpm.com/u8dwrgdqn?key=db4989986213c83ff807ff443efadc45"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 hover:border-primary transition-colors cursor-pointer group"
+                >
+                  <div className="w-16 h-16 rounded-lg bg-slate-300 dark:bg-slate-700 shrink-0 flex items-center justify-center">
+                    <span className="material-symbols-outlined">download</span>
+                  </div>
+                  <div className="overflow-hidden">
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Sponsored</span>
+                    <h4 className="text-slate-900 dark:text-slate-100 font-bold text-sm truncate">Fast Download</h4>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs truncate">Server kecepatan tinggi</p>
+                  </div>
+                </a>
+
               </div>
             </div>
 
